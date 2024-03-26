@@ -69,11 +69,6 @@ public class LectureServiceImpl implements LectureService{
         return result;
     }
 
-    public LectureTime selectLecTimeByUserId(LectureRegist param){
-        LectureTime result = new LectureTime();
-        result = timeRepo.selectByTimeId(param);
-        return result;
-    }
     public void registCheck(LectureRegist param){
         // userId timeId 있는지 체크
 
