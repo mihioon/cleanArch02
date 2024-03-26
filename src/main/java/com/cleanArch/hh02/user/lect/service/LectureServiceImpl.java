@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -38,19 +39,28 @@ public class LectureServiceImpl implements LectureService{
 
     @Override
     public String lectureRegist(LectureRegistRequest param) {
-        String userId = param.getUserId();
-        Long timeId = mapper.parseStrLong(param.getTimeId());
-
-        LectureTime lectureTime = timeRepo.selectByTimeId(timeId);
-        UserRequest userDto = new UserRequest(userId);
-        User user = userService.selectUserByUserId(userDto);
-
-        LectureRegist lectureRegist = mapper.dtoToEntity(param, lectureTime, user);
-
-        registCheck(lectureRegist); // 유효성 체크
-
         String result = "01";
         try {
+            String userId = param.getUserId();
+            Long timeId = mapper.parseStrLong(param.getTimeId());
+
+            if(userId == null || userId.isEmpty() || timeId == null){
+                throw new IllegalArgumentException("요청 전달 값 없음");
+            }
+
+            LectureTime lectureTime = timeRepo.selectByTimeId(timeId);
+            UserRequest userDto = new UserRequest(userId);
+            User user = userService.selectUserByUserId(userDto);
+
+            // lectureTime, user 있는지 체크
+            if(lectureTime == null || user == null){
+                throw new IllegalArgumentException("사용자 또는 강의 없음");
+            }
+
+            LectureRegist lectureRegist = mapper.dtoToEntity(param, lectureTime, user);
+
+            registCheck(lectureRegist); // 유효성 체크
+
             regitstRepo.save(lectureRegist);
             result = "00"; //성공
         } catch (DataAccessException e) {
@@ -70,11 +80,23 @@ public class LectureServiceImpl implements LectureService{
     }
 
     public void registCheck(LectureRegist param){
-        // userId timeId 있는지 체크
-
         // userId-timeId 예약내역 없는지 체크
+        boolean flag = regitstRepo.findByLectIdAndUserId(param.getUser(), param.getLectureTime()) == null;
+        if(flag){
+            throw new IllegalStateException("중복 예약 내역");
+        }
+        // 특강 오픈 타임과 서버 타임 비교
+        Timestamp timestamp1 = param.getLectureTime().getOpenDtm(); //특강오픈타임
+        Timestamp timestamp2 = param.getRegistDtm(); //서버타임
 
-        // 특강 타임과 서버 타임 비교
+        if (timestamp1.compareTo(timestamp2) < 0) {
+            throw new IllegalStateException("유효한 시간값이 아님");
+        }
 
+        // 신청 인원수 확인
+        int cnt = regitstRepo.countByLecture(param.getLectureTime().getLecture());
+        if(!(cnt < 30)){
+            throw new IllegalStateException("수강인원 초과");
+        }
     }
 }

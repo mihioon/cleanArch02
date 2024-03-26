@@ -24,6 +24,9 @@ public class LectureTime { /* 강의시간정보 */
     @Column(nullable = false)
     private Timestamp endDtm; /* 강의종료시간 */
 
+    @Column(nullable = false)
+    private Timestamp openDtm; /* 강의오픈시간 */
+
     @OneToMany(mappedBy = "lectureTime")
     private List<LectureRegist> lectureRegists;
 }

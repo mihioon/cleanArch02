@@ -12,7 +12,7 @@ public class CommonConvImpl implements CommonConvMapper {
 
     //공통
     public Long parseStrLong(String str){
-        Long number = 0L;
+        Long number = null;
         try {
             number = Long.parseLong(str);
         } catch (NumberFormatException e) {
