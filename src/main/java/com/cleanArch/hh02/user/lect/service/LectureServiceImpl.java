@@ -81,10 +81,13 @@ public class LectureServiceImpl implements LectureService{
 
     public void registCheck(LectureRegist param){
         // userId-timeId 예약내역 없는지 체크
+        /*
         boolean flag = regitstRepo.findByLectIdAndUserId(param.getUser(), param.getLectureTime()) == null;
         if(flag){
             throw new IllegalStateException("중복 예약 내역");
         }
+        */
+        // 이 부분은 rock 처리로 없어도 되는지
         // 특강 오픈 타임과 서버 타임 비교
         Timestamp timestamp1 = param.getLectureTime().getOpenDtm(); //특강오픈타임
         Timestamp timestamp2 = param.getRegistDtm(); //서버타임
