@@ -1,10 +1,12 @@
 package com.cleanArch.hh02.user.lect.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.List;
 
 @Entity
+@Getter
 @Table(name = "lecture")
 public class Lecture { /* 강의정보 */
     @Id

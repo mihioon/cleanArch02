@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface LectureRegitstRepository extends JpaRepository<LectureRegist, Integer> {
+    //DAO e.g. DB에 데이터를 CRUD 하는 JpaRepository<>를 상속받는 Repository 객체들
     int countByLectId(Long lectId); // 강의 ID로 강의 신청 인원 수 조회
 
     int countByLectIdAndUserId(Long lectId, Long userId); // 해당 강의 사용자 신청여부

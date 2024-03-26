@@ -1,10 +1,15 @@
 package com.cleanArch.hh02.user.lect.model;
 
+import com.cleanArch.hh02.common.model.User;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "lecture_regist",
         uniqueConstraints = { @UniqueConstraint(columnNames = {"userId", "timeId"}) }
 )

@@ -1,10 +1,13 @@
-package com.cleanArch.hh02.user.lect.model;
+package com.cleanArch.hh02.common.model;
 
+import com.cleanArch.hh02.user.lect.model.LectureRegist;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.List;
 
 @Entity
+@Getter
 @Table(name = "user")
 public class User { /* 사용자정보 */
     @Id

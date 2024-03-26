@@ -1,11 +1,13 @@
 package com.cleanArch.hh02.user.lect.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
+@Getter
 @Table(name = "lecture_time")
 public class LectureTime { /* 강의시간정보 */
     @Id
