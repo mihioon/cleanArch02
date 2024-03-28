@@ -1,12 +1,12 @@
 package com.cleanArch.hh02.user.lect.service;
 
-import com.cleanArch.hh02.user.lect.dto.LectureListRequest;
-import com.cleanArch.hh02.user.lect.dto.LectureListResponse;
-import com.cleanArch.hh02.user.lect.dto.LectureRegistRequest;
-
-import java.util.List;
+import com.cleanArch.hh02.error.RegistException;
+import com.cleanArch.hh02.user.lect.entity.Lecture;
+import com.cleanArch.hh02.user.lect.service.serviceDTO.LectureDTO;
 
 public interface LectureService {
-    public String lectureRegist(LectureRegistRequest param);
-    public List<LectureListResponse> registSuccessList(LectureListRequest param);
+    public Lecture selectLectureByLectureId(LectureDTO param);
+    public void saveLectureRegist(LectureDTO param) throws RegistException;
+    public LectureDTO isRegistSuccess(LectureDTO param);
+    public Long selectRegistCnt(LectureDTO param);
 }

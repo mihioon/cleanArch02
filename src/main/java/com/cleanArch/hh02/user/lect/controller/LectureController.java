@@ -1,10 +1,12 @@
 package com.cleanArch.hh02.user.lect.controller;
 
-import com.cleanArch.hh02.user.lect.dto.LectureListRequest;
-import com.cleanArch.hh02.user.lect.dto.LectureListResponse;
-import com.cleanArch.hh02.user.lect.dto.LectureRegistRequest;
+import com.cleanArch.hh02.error.RegistException;
+import com.cleanArch.hh02.user.lect.controller.controllerDTO.LectureExistRequest;
+import com.cleanArch.hh02.user.lect.controller.controllerDTO.LectureListResponse;
+import com.cleanArch.hh02.user.lect.controller.controllerDTO.LectureRegistRequest;
 import com.cleanArch.hh02.common.dto.UserRequest;
 import com.cleanArch.hh02.user.lect.service.LectureService;
+import com.cleanArch.hh02.user.lect.service.serviceDTO.LectureDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,27 +32,31 @@ public class LectureController {
     //특강 신청 API
     // @ResponseBody > @RestController 내의 모든 메서드 기본적으로 포함
     @RequestMapping(value = "/regist.do")
-    public Map<String,String> regist(LectureRegistRequest param, HttpServletRequest request){
-        UserRequest usr = getSessionUser(request);
-        if(usr != null){
-            param.setUserId(usr.getUserId());
-        }
+    public Map<String, Object> regist(LectureRegistRequest param) throws RegistException {
+        Map<String, Object> result = new HashMap<>();
 
-        String msgCd = lectureService.lectureRegist(param);
+        LectureDTO lectureDTO = LectureDTO.builder()
+                                    .userId(param.getUserId())
+                                    .lectureId(param.getLectureId())
+                                    .build();
+        lectureService.saveLectureRegist(lectureDTO);
 
-        Map<String,String> result = new HashMap<>();
-        result.put("msgCd", msgCd);
+        //result.put("", );
         return result;
     }
 
     //특강 신청 여부 조회 API
-    @RequestMapping(value = "/searchRegistList.do")
-    public List<LectureListResponse> searchRegistList(LectureListRequest param, HttpServletRequest request){
-        UserRequest usr = getSessionUser(request);
-        if(usr != null){
-            param.setUserId(usr.getUserId());
-        }
-        List<LectureListResponse> registList = lectureService.registSuccessList(param);
-        return registList;
+    @RequestMapping(value = "/searchUserRegist.do")
+    public Map<String, Object> searchUserRegist(LectureExistRequest param){
+        Map<String, Object> result = new HashMap<>();
+
+        LectureDTO lectureDTO = LectureDTO.builder()
+                                    .userId(param.getUserId())
+                                    .lectureId(param.getLectureId())
+                                    .build();
+        LectureDTO registList = lectureService.isRegistSuccess(lectureDTO);
+
+        result.put("registList", registList);
+        return result;
     }
 }
