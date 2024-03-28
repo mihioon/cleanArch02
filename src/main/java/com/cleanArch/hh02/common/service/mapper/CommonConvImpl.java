@@ -1,6 +1,7 @@
-package com.cleanArch.hh02.common.mapper;
+package com.cleanArch.hh02.common.service.mapper;
 
-import com.cleanArch.hh02.common.dto.UserRequest;
+import com.cleanArch.hh02.common.service.serviceDTO.UserDTO;
+import com.cleanArch.hh02.error.ParseException;
 import org.springframework.stereotype.Component;
 
 import java.util.logging.Logger;
@@ -11,19 +12,17 @@ public class CommonConvImpl implements CommonConvMapper {
     private static final Logger log = Logger.getLogger(CommonConvImpl.class.getName());
 
     //공통
-    public Long parseStrLong(String str){
+    public Long parseStrLong(String str) throws ParseException {
         Long number = null;
         try {
             number = Long.parseLong(str);
         } catch (NumberFormatException e) {
-            log.severe("DtoToEntity>NumberFormatException : " + e.toString());
+            throw new ParseException("숫자 값이 아님.");
         }
         return number;
     }
 
-    public Long dtoToUserId(UserRequest param) {
-        String str = param.getUserId();
-        Long result = parseStrLong(str);
-        return result;
+    public Long dtoToUserId(UserDTO param) throws ParseException {
+        return parseStrLong(param.getUserId());
     }
 }

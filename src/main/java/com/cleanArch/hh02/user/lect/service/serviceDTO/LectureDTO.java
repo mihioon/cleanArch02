@@ -1,6 +1,6 @@
 package com.cleanArch.hh02.user.lect.service.serviceDTO;
 
-import com.cleanArch.hh02.common.model.User;
+import com.cleanArch.hh02.common.entity.User;
 import com.cleanArch.hh02.user.lect.entity.Lecture;
 import lombok.*;
 

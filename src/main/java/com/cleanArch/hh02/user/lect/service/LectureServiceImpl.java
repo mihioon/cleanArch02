@@ -1,9 +1,9 @@
 package com.cleanArch.hh02.user.lect.service;
 
-import com.cleanArch.hh02.common.dto.UserRequest;
-import com.cleanArch.hh02.common.model.User;
+import com.cleanArch.hh02.common.entity.User;
 import com.cleanArch.hh02.common.service.UserService;
-import com.cleanArch.hh02.error.RegistException;
+import com.cleanArch.hh02.common.service.serviceDTO.UserDTO;
+import com.cleanArch.hh02.error.ParseException;
 import com.cleanArch.hh02.user.lect.service.mapper.LectureConvMapper;
 import com.cleanArch.hh02.user.lect.entity.Lecture;
 import com.cleanArch.hh02.user.lect.entity.LectureRegist;
@@ -35,7 +35,7 @@ public class LectureServiceImpl implements LectureService{
     }
 
     @Override
-    public Lecture selectLectureByLectureId(LectureDTO param){
+    public Lecture selectLectureByLectureId(LectureDTO param) throws ParseException {
         Long lectureId = mapper.dtoToLectureId(param);
         Lecture result = lectureRepo.findByLectureId(lectureId);
         return result;
@@ -43,10 +43,11 @@ public class LectureServiceImpl implements LectureService{
 
     @Override
     @Transactional
-    public void saveLectureRegist(LectureDTO param) throws RegistException {
-        UserRequest userRequest = new UserRequest();
-        userRequest.setUserId(param.getUserId());
-        User user = userService.selectUserByUserId(userRequest);
+    public void saveLectureRegist(LectureDTO param) throws ParseException {
+        UserDTO userDTO = UserDTO.builder()
+                                .userId(param.getUserId())
+                                .build();
+        User user = userService.selectUserByUserId(userDTO);
 
         LectureDTO lectureDTO = LectureDTO.builder()
                                 .lectureId(param.getLectureId())
@@ -76,7 +77,7 @@ public class LectureServiceImpl implements LectureService{
         return result;
     }
 
-    public Long selectRegistCnt(LectureDTO param){
+    public Long selectRegistCnt(LectureDTO param) throws ParseException {
         Long lectureId = mapper.dtoToLectureId(param);
         Long result = regitstRepo.countByLectureId(lectureId);
         return result;

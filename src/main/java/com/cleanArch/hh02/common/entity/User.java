@@ -1,4 +1,4 @@
-package com.cleanArch.hh02.common.model;
+package com.cleanArch.hh02.common.entity;
 
 import com.cleanArch.hh02.user.lect.entity.LectureRegist;
 import jakarta.persistence.*;

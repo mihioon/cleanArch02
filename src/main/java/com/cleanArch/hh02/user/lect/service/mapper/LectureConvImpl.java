@@ -1,6 +1,7 @@
 package com.cleanArch.hh02.user.lect.service.mapper;
 
-import com.cleanArch.hh02.common.mapper.CommonConvImpl;
+import com.cleanArch.hh02.common.service.mapper.CommonConvImpl;
+import com.cleanArch.hh02.error.ParseException;
 import com.cleanArch.hh02.error.RegistException;
 import com.cleanArch.hh02.user.lect.entity.LectureRegist;
 import com.cleanArch.hh02.user.lect.service.serviceDTO.LectureDTO;
@@ -12,12 +13,12 @@ import java.time.LocalDateTime;
 public class LectureConvImpl extends CommonConvImpl implements LectureConvMapper {
 
     @Override
-    public Long dtoToUserId(LectureDTO param) {
+    public Long dtoToUserId(LectureDTO param) throws ParseException {
         return parseStrLong(param.getUserId());
     }
 
     @Override
-    public Long dtoToLectureId(LectureDTO param) {
+    public Long dtoToLectureId(LectureDTO param) throws ParseException {
         return parseStrLong(param.getLectureId());
     }
 
