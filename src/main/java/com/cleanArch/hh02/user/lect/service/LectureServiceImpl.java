@@ -4,6 +4,7 @@ import com.cleanArch.hh02.common.entity.User;
 import com.cleanArch.hh02.common.service.UserService;
 import com.cleanArch.hh02.common.service.serviceDTO.UserDTO;
 import com.cleanArch.hh02.error.ParseException;
+import com.cleanArch.hh02.error.RegistException;
 import com.cleanArch.hh02.user.lect.service.mapper.LectureConvMapper;
 import com.cleanArch.hh02.user.lect.entity.Lecture;
 import com.cleanArch.hh02.user.lect.entity.LectureRegist;
@@ -35,7 +36,7 @@ public class LectureServiceImpl implements LectureService{
     }
 
     @Override
-    public Lecture selectLectureByLectureId(LectureDTO param) throws ParseException {
+    public Lecture selectLectureByLectureId(LectureDTO param) throws RegistException {
         Long lectureId = mapper.dtoToLectureId(param);
         Lecture result = lectureRepo.findByLectureId(lectureId);
         return result;
@@ -43,25 +44,16 @@ public class LectureServiceImpl implements LectureService{
 
     @Override
     @Transactional
-    public void saveLectureRegist(LectureDTO param) throws ParseException {
-        UserDTO userDTO = UserDTO.builder()
-                                .userId(param.getUserId())
-                                .build();
+    public void saveLectureRegist(LectureDTO param) throws ParseException, RegistException  {
+        UserDTO userDTO = UserDTO.builder().userId(param.getUserId()).build();
         User user = userService.selectUserByUserId(userDTO);
 
-        LectureDTO lectureDTO = LectureDTO.builder()
-                                .lectureId(param.getLectureId())
-                                .build();
+        LectureDTO lectureDTO = LectureDTO.builder().lectureId(param.getLectureId()).build();
         Lecture lecture = selectLectureByLectureId(lectureDTO);
 
         Long registCnt = selectRegistCnt(lectureDTO);
 
-        LectureDTO lectureRegistDTO = LectureDTO.builder()
-                                                .user(user)
-                                                .lecture(lecture)
-                                                .registCnt(registCnt)
-                                                .build();
-
+        LectureDTO lectureRegistDTO = LectureDTO.builder().user(user).lecture(lecture).registCnt(registCnt).build();
         LectureRegist lectureRegist = mapper.dtoToEntity(lectureRegistDTO);
 
         regitstRepo.save(lectureRegist);
@@ -77,7 +69,7 @@ public class LectureServiceImpl implements LectureService{
         return result;
     }
 
-    public Long selectRegistCnt(LectureDTO param) throws ParseException {
+    public Long selectRegistCnt(LectureDTO param) throws RegistException {
         Long lectureId = mapper.dtoToLectureId(param);
         Long result = regitstRepo.countByLectureId(lectureId);
         return result;

@@ -1,5 +1,6 @@
 package com.cleanArch.hh02.user.lect.controller;
 
+import com.cleanArch.hh02.error.ParseException;
 import com.cleanArch.hh02.error.RegistException;
 import com.cleanArch.hh02.user.lect.controller.controllerDTO.LectureExistRequest;
 import com.cleanArch.hh02.user.lect.controller.controllerDTO.LectureRegistRequest;
@@ -30,14 +31,20 @@ public class LectureController {
     //특강 신청 API
     // @ResponseBody > @RestController 내의 모든 메서드 기본적으로 포함
     @RequestMapping(value = "/regist.do")
-    public Map<String, Object> regist(LectureRegistRequest param) throws RegistException {
+    public Map<String, Object> regist(LectureRegistRequest param) throws RegistException, ParseException {
         Map<String, Object> result = new HashMap<>();
 
         LectureDTO lectureDTO = LectureDTO.builder()
                                     .userId(param.getUserId())
                                     .lectureId(param.getLectureId())
                                     .build();
-        lectureService.saveLectureRegist(lectureDTO);
+        try{
+            lectureService.saveLectureRegist(lectureDTO);
+        } catch (RegistException e){
+
+        } catch (ParseException e){
+
+        }
 
         //result.put("", );
         return result;
@@ -52,8 +59,12 @@ public class LectureController {
                                     .userId(param.getUserId())
                                     .lectureId(param.getLectureId())
                                     .build();
-        LectureDTO registList = lectureService.isRegistSuccess(lectureDTO);
+        LectureDTO registList = null;
+        try {
+            registList = lectureService.isRegistSuccess(lectureDTO);
+        } catch(RegistException e){
 
+        }
         result.put("registList", registList);
         return result;
     }
